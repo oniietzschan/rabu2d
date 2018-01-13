@@ -10,13 +10,6 @@ Kyuu
 
 ```lua
 local Kyuu = require 'kyuu'
-local image
-local widthColLeft  =  8
-local widthColMid   = 16
-local widthColRight =  8
-local heightRowTop =  8
-local heightRowMid = 16
-local heightRowBot = 12
 local patch = Kyuu(
   love.graphics.newImage('9patch.png'), -- Path to asset is also supported
   8,  -- left column width
