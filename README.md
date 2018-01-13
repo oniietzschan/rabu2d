@@ -21,7 +21,10 @@ local patch = Kyuu(
   0, -- image X offset, for sprite atlases and such
   0, -- image Y offset
 )
-local spriteBatch = patch:getSpriteBatch() -- Literally just a love2d SpriteBatch.
+local spriteBatch = patch:getSpriteBatch(
+  48, -- width
+  36  -- height
+)
 love.graphics.draw(spriteBatch, 0, 0)
 ```
 
