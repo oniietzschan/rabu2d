@@ -17,12 +17,12 @@ function Kyuu:newPatch(...)
     :init(...)
 end
 
-function Patch:init(image, colLgt, colMid, colRgt, rowTop, rowMid, rowBot, left, top)
+function Patch:init(image, colLft, colMid, colRgt, rowTop, rowMid, rowBot, left, top)
   top = top or 0
   left = left or 0
   return self
     :setImage(image)
-    :setDimensions(colLgt, colMid, colRgt, rowTop, rowMid, rowBot)
+    :setDimensions(colLft, colMid, colRgt, rowTop, rowMid, rowBot)
     :setOffset(left, top)
 end
 
@@ -34,14 +34,14 @@ function Patch:setImage(image)
   return self
 end
 
-function Patch:setDimensions(colLgt, colMid, colRgt, rowTop, rowMid, rowBot)
-  assertType(colLgt, 'number', 'column left width')
+function Patch:setDimensions(colLft, colMid, colRgt, rowTop, rowMid, rowBot)
+  assertType(colLft, 'number', 'column left width')
   assertType(colMid, 'number', 'column middle width')
   assertType(colRgt, 'number', 'column right width')
   assertType(rowTop, 'number', 'row left height')
   assertType(rowMid, 'number', 'row middle height')
   assertType(rowBot, 'number', 'row right height')
-  self._colLgt = colLgt
+  self._colLft = colLft
   self._colMid = colMid
   self._colRgt = colRgt
   self._rowTop = rowTop
@@ -73,7 +73,8 @@ local BOT_RGT = 'BOT_RGT'
 function Patch:getSpriteBatch(w, h)
   self:_validateSpriteBatchDimensions(w, h)
   self:_tryGenerateQuads()
-  local batch = love.graphics.newSpriteBatch(self._image, 1000, 'static')
+  local draws, len = {}, 0
+
   local x, y, qw, qh, _ = 0, 0, 0, 0, nil
   while y < h do
     local rowName, quadName
@@ -97,19 +98,27 @@ function Patch:getSpriteBatch(w, h)
 
       local quad = self._quads[quadName]
       _, _, qw, qh = quad:getViewport()
-      batch:add(quad, x, y)
+
+      len = len + 1
+      draws[len] = {quad, x, y}
+
       x = x + qw
     end
     x = 0
     y = y + qh
   end
 
+  local batch = love.graphics.newSpriteBatch(self._image, len, 'static')
+  for _, draw in ipairs(draws) do
+    batch:add(unpack(draw))
+  end
   batch:flush()
+
   return batch
 end
 
 function Patch:_validateSpriteBatchDimensions(w, h)
-  local xRemainder = (w - self._colLgt - self._colRgt) % self._colMid
+  local xRemainder = (w - self._colLft - self._colRgt) % self._colMid
   local yRemainder = (h - self._rowTop - self._rowBot) % self._rowMid
   if xRemainder ~= 0 or yRemainder ~= 0 then
     error(('Invalid dimensions: %d, %d Remainder of %d, %d'):format(w, h, xRemainder, yRemainder), 3)
@@ -117,13 +126,13 @@ function Patch:_validateSpriteBatchDimensions(w, h)
 end
 
 local mapQuadToComponents = {
-  {TOP_LFT, '_colLgt', '_rowTop'},
+  {TOP_LFT, '_colLft', '_rowTop'},
   {TOP_MID, '_colMid', '_rowTop'},
   {TOP_RGT, '_colRgt', '_rowTop'},
-  {MID_LFT, '_colLgt', '_rowMid'},
+  {MID_LFT, '_colLft', '_rowMid'},
   {MID_MID, '_colMid', '_rowMid'},
   {MID_RGT, '_colRgt', '_rowMid'},
-  {BOT_LFT, '_colLgt', '_rowBot'},
+  {BOT_LFT, '_colLft', '_rowBot'},
   {BOT_MID, '_colMid', '_rowBot'},
   {BOT_RGT, '_colRgt', '_rowBot'},
 }
