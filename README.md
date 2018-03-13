@@ -10,7 +10,7 @@ Utility for gameplay physics calculations, especially relating to player movemen
 
 
 ```lua
-local Kyuu = require 'kyuu'
+local Dontsuu = require 'dontsuu'
 FRICTION = Dontsuu.calculateFriction(maxSpeed, timeToStop, cutoffSpeed)
 
 function player:update(dt)
