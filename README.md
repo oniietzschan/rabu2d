@@ -3,6 +3,23 @@ rabu2d
 
 Micro unfriendly love2d libraries and scripts mostly for personal use?
 
+Dontsuu
+-------
+
+Utility for gameplay physics calculations, especially relating to player movement.
+
+
+```lua
+local Kyuu = require 'kyuu'
+FRICTION = Dontsuu.calculateFriction(maxSpeed, timeToStop, cutoffSpeed)
+
+function player:update(dt)
+  local moveX, moveY = self.controller:get(MOVE)
+  self.velocityX = Dontsuu.getVelocity(dt, self.acceleration, self.maxSpeed, self.velocityX, moveX)
+  self.velocityY = Dontsuu.getVelocity(dt, self.acceleration, self.maxSpeed, self.velocityY, moveY)
+end
+```
+
 Kyuu
 ----
 
