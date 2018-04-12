@@ -3,11 +3,12 @@ rabu2d
 
 Micro unfriendly love2d libraries and scripts mostly for personal use?
 
+
+
 Dontsuu
 -------
 
 Utility for gameplay physics calculations, especially relating to player movement.
-
 
 ```lua
 local Dontsuu = require 'dontsuu'
@@ -19,6 +20,8 @@ function player:update(dt)
   self.velocityY = Dontsuu.getVelocity(dt, self.acceleration, self.maxSpeed, self.velocityY, moveY)
 end
 ```
+
+
 
 Kyuu
 ----
@@ -44,6 +47,63 @@ local spriteBatch = patch:getSpriteBatch(
 )
 love.graphics.draw(spriteBatch, 0, 0)
 ```
+
+
+
+Neto
+----
+
+Imgui helper.
+
+```lua
+-- Setup
+imgui = require 'imgui'
+Neto = require 'neto'
+Neto:setImgui(imgui)
+
+-- List
+local label = 'Best Girl'
+local options = {'Konata', 'Kagami', 'Tsukasa', 'Miyuki'}
+local selected = 'Tsukasa'
+local maxHeightInItems = 4
+local newValue = Neto.list(label, selected, options, maxHeightInItems)
+if newValue then
+  -- Do something with newValue.
+end
+
+-- Tree
+local data = {
+  ['Folder One'] = {
+    ['Subfolder One'] = {
+      'Item 1',
+      'Item 2',
+    },
+    ['Subfolder Two'] = {
+      'Item 3',
+      'Item 4',
+    },
+    'Item 5',
+    'Item 6',
+  },
+  ['Folder Two'] = {
+    'Item 7',
+    'Item 8',
+  },
+  'Item 9',
+  'Item 10',
+  'Item 11',
+}
+local expanded = {
+  ['Folder One'] = true,
+  ['Subfolder Two'] = true,
+}
+local selected = Neto.tree(data, expanded)
+if selected then
+  -- Do something with selected.
+end
+```
+
+
 
 Sebu
 ----
