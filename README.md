@@ -56,12 +56,14 @@ Neto
 Imgui helper.
 
 ```lua
--- Setup
+-- *** SETUP ***
 imgui = require 'imgui'
 Neto = require 'neto'
 Neto:setImgui(imgui)
+```
 
--- List
+```lua
+-- *** LIST ***
 local label = 'Best Girl'
 local options = {'Konata', 'Kagami', 'Tsukasa', 'Miyuki'}
 local selected = 'Tsukasa'
@@ -70,8 +72,10 @@ local newValue = Neto.list(label, selected, options, maxHeightInItems)
 if newValue then
   -- Do something with newValue.
 end
+```
 
--- Tree
+```lua
+-- *** TREE ***
 local data = {
   ['Folder One'] = {
     ['Subfolder One'] = {
