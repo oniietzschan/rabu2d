@@ -6,6 +6,10 @@ function M.setImgui(_imgui)
   imgui = _imgui
 end
 
+function M.button(label)
+  return imgui.Button(label)
+end
+
 function M.list(label, selected, options, maxHeightInItems)
   local len = #options
   local index = 0
@@ -24,28 +28,31 @@ function M.list(label, selected, options, maxHeightInItems)
   return (changed == true) and options[selectionIndex] or nil
 end
 
-local TREE_LEAF = {'Bullet', 'NoTreePushOnOpen'}
+function M.slider(label, value, min, max)
+  local newValue, changed = imgui.SliderFloat(label, value, min, max)
+  return newValue, changed
+end
 
-function M.tree(data, expandedMap)
+local TREE_LEAF          = {'Bullet', 'NoTreePushOnOpen'}
+local TREE_LEAF_SELECTED = {'Bullet', 'NoTreePushOnOpen', 'Selected'}
+
+function M.tree(data, expandedMap, selected)
   local result = nil
 
   local folders = {}
-  local len = 0
   for k, v in pairs(data) do
     if type(k) == 'string' then
-      len = len + 1
-      folders[len] = k
+      table.insert(folders, k)
     end
   end
   table.sort(folders)
 
-  for i = 1, len do
-    local folder = folders[i]
+  for _, folder in ipairs(folders) do
     if expandedMap and expandedMap[folder] == true then
       imgui.SetNextTreeNodeOpen(true)
     end
     if imgui.TreeNode(folder) then
-      local recursiveResult = M.tree(data[folder], expandedMap)
+      local recursiveResult = M.tree(data[folder], expandedMap, selected)
       if recursiveResult then
         result = recursiveResult
       end
@@ -58,7 +65,8 @@ function M.tree(data, expandedMap)
   for i, v in ipairs(data) do
     -- Forces node to be closed, meaning that this condition will only trigger once after click.
     imgui.SetNextTreeNodeOpen(false)
-    local wasLeafClicked = imgui.TreeNodeEx(v, TREE_LEAF)
+    local nodeOptions = (v == selected) and TREE_LEAF_SELECTED or TREE_LEAF
+    local wasLeafClicked = imgui.TreeNodeEx(v, nodeOptions)
     if wasLeafClicked then
       result = v
     end

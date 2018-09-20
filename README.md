@@ -101,9 +101,10 @@ local expanded = {
   ['Folder One'] = true,
   ['Subfolder Two'] = true,
 }
-local selected = Neto.tree(data, expanded)
-if selected then
-  -- Do something with selected.
+local selected = 'Item 2'
+local newSelection = Neto.tree(data, expanded, selected)
+if newSelection then
+  -- Do something with newSelection.
 end
 ```
 
