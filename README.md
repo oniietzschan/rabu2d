@@ -50,6 +50,25 @@ love.graphics.draw(spriteBatch, 0, 0)
 
 
 
+Mizu
+----
+
+A collection designed to be fast for adding and removing and iterating.
+
+```lua
+local Mizu = require 'mizu'
+local player, enemy = {name = 'Player'}, {name = 'Enemy'}
+local collection = Mizu()
+collection:add(player)
+collection:add(enemy)
+for _, entity in ipairs(collection.items) do
+  print(entity.name)
+end
+collection:remove(enemy)
+```
+
+
+
 Neto
 ----
 
